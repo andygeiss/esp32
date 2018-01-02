@@ -1,6 +1,4 @@
 {
-    "Loop": "void loop",
-    "Setup": "void setup",
     "digital.Low": "LOW",
     "digital.High": "HIGH",
     "digital.ModeInput": "INPUT",
@@ -26,7 +24,9 @@
     "serial.Print": "Serial.print",
     "serial.Println": "Serial.println",
     "timer.Delay": "delay",
+    "wifi": "WiFi",
     "wifi.Begin": "WiFi.begin",
+    "wifi.BeginEncrypted": "WiFi.begin",
     "wifi.BSSID": "WiFi.BSSID",
     "wifi.Disconnect": "WiFi.disconnect",
     "wifi.EncryptionType": "WiFi.encryptionType",
@@ -35,10 +35,13 @@
     "wifi.EncryptionTypeNone": "7",
     "wifi.EncryptionTypeTKIP": "2",
     "wifi.EncryptionTypeWEP": "5",
+    "wifi.LocalIP": "WiFi.localIP",
     "wifi.RSSI": "WiFi.RSSI",
     "wifi.ScanNetworks": "WiFi.scanNetworks",
     "wifi.SetDNS": "WiFi.setDNS",
     "wifi.SSID": "WiFi.SSID",
     "wifi.StatusConnected": "WL_CONNECTED",
-    "wifi.StatusIdle": "WL_IDLE"
+    "wifi.StatusIdle": "WL_IDLE",
+    "Loop": "void loop",
+    "Setup": "void setup"
 }

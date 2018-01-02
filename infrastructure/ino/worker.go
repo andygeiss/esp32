@@ -6,7 +6,6 @@ import (
 	"go/parser"
 	"go/token"
 	"io"
-	"os"
 	"strings"
 
 	"github.com/andygeiss/esp32/business/worker"
@@ -76,7 +75,7 @@ func (w *Worker) Start() error {
 		}
 	}
 	// Print the AST.
-	ast.Fprint(os.Stderr, fset, file, nil)
+	//ast.Fprint(os.Stderr, fset, file, nil)
 	return nil
 }
 
@@ -144,6 +143,8 @@ func handleCallExpr(expr *ast.CallExpr) string {
 		switch a := arg.(type) {
 		case *ast.BasicLit:
 			args = append(args, handleBasicLit(a))
+		case *ast.CallExpr:
+			args = append(args, handleCallExpr(a))
 		case *ast.SelectorExpr:
 			args = append(args, handleSelectorExpr(a))
 		}
@@ -160,9 +161,6 @@ func handleDecl(id int, decl ast.Decl, dst chan<- string, done chan<- bool) {
 		code += handleFuncDecl(d)
 	case *ast.GenDecl:
 		code += handleGenDecl(d)
-		if code != "" {
-			code += ";"
-		}
 	}
 	dst <- code
 	close(dst)
@@ -238,7 +236,6 @@ func handleFuncDeclBody(body *ast.BlockStmt) string {
 			code += ";"
 		case *ast.DeclStmt:
 			code += handleDeclStmt(s)
-			code += ";"
 		case *ast.ExprStmt:
 			code += handleExprStmt(s)
 			code += ";"
@@ -288,6 +285,19 @@ func handleIdent(expr ast.Expr) string {
 	return code
 }
 
+func handleImportSpec(spec ast.Spec) string {
+	s := spec.(*ast.ImportSpec)
+	code := ""
+	if s.Name != nil {
+		name := handleIdent(s.Name)
+		name = mapping.Apply(name)
+		if name != "" {
+			code = "#include <" + name + ".h>\n"
+		}
+	}
+	return code
+}
+
 func handleSelectorExpr(expr ast.Expr) string {
 	s := expr.(*ast.SelectorExpr)
 	code := ""
@@ -305,8 +315,10 @@ func handleSpecs(specs []ast.Spec) string {
 	code := ""
 	for _, spec := range specs {
 		switch spec.(type) {
+		case *ast.ImportSpec:
+			code += handleImportSpec(spec)
 		case *ast.ValueSpec:
-			code += handleValueSpec(spec)
+			code += handleValueSpec(spec) + ";"
 		}
 	}
 	return code

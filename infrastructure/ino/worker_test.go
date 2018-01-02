@@ -212,11 +212,29 @@ func TestFunctionWithIdentParam(t *testing.T) {
 	Validate(source, expected, t)
 }
 
+func TestFunctionWithFunctionParam(t *testing.T) {
+	source := `package test
+	func foo() {
+		serial.Println(wifi.LocalIP())
+	}
+	`
+	expected := `
+	void foo() {
+		Serial.println(WiFi.localIP());
+	}
+	`
+	Validate(source, expected, t)
+}
+
 func TestPackageImport(t *testing.T) {
 	source := `package test
 	import "github.com/andygeiss/esp32-mqtt/business/controller"
 	import "github.com/andygeiss/esp32-mqtt/business/controller/serial"
+	import "github.com/andygeiss/esp32/business/controller/timer"
+	import wifi "github.com/andygeiss/esp32/business/controller/wifi"
 	`
-	expected := ``
+	expected := `
+	#include <WiFi.h>
+	`
 	Validate(source, expected, t)
 }

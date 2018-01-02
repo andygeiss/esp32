@@ -3,7 +3,6 @@ package ino
 import (
 	"encoding/json"
 	"io/ioutil"
-	"strings"
 
 	"github.com/andygeiss/esp32/business/worker"
 )
@@ -22,9 +21,9 @@ func NewMapping(filename string) worker.Mapping {
 
 // Apply checks the Golang identifier and transforms it to a specific representation.
 func (m *Mapping) Apply(ident string) string {
-	for prefix := range m.Rules {
-		if strings.HasPrefix(ident, prefix) {
-			ident = m.Rules[prefix]
+	for wanted := range m.Rules {
+		if ident == wanted {
+			ident = m.Rules[ident]
 		}
 	}
 	return ident

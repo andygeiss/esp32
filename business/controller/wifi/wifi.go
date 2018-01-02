@@ -75,7 +75,7 @@ func Disconnect() {
 	CurrentStatus = StatusIdle
 }
 
-// EncryptionType gets the encryption type of the current network
+// EncryptionType gets the encryption type of the current network.
 // @see: https://www.arduino.cc/en/Reference/WiFiEncryptionType
 func EncryptionType() int {
 	return CurrentEncryptionType
@@ -84,6 +84,12 @@ func EncryptionType() int {
 // HostByName ...
 func HostByName(hostname string, addr string) int {
 	return 0
+}
+
+// LocalIP gets the WiFi shield's IP address.
+// @see: https://www.arduino.cc/en/Reference/WiFiLocalIP
+func LocalIP() *IPAddress {
+	return nil
 }
 
 // RSSI gets the signal strength of the connection to the router.
