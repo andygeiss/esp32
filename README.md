@@ -2,7 +2,7 @@
 
 [![](https://goreportcard.com/badge/github.com/andygeiss/esp32)](https://goreportcard.com/report/github.com/andygeiss/esp32)
 
-Build your own toolchain to develop, test, build and finally deploy your IoT controller to your ESP32 device.
+Build your own toolchain to develop, test, build and finally deploy a Golang controller to your ESP32 device.
 
     +--------+    +---------+    +----------+
     |  Test  +---->  Build  +---->  Deploy  |
