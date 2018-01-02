@@ -3,7 +3,7 @@ package wifi_test
 import (
 	"testing"
 
-	"github.com/andygeiss/goat/business/controller/wifi"
+	"github.com/andygeiss/esp32/business/controller/wifi"
 )
 
 func TestWifiBegin(t *testing.T) {

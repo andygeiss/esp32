@@ -3,7 +3,7 @@ package main
 import (
 	"log"
 
-	"github.com/andygeiss/esp32-mqtt/application/device"
+	"github.com/andygeiss/esp32/application/device"
 )
 
 func main() {

@@ -5,7 +5,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/andygeiss/goat/infrastructure/ino"
+	"github.com/andygeiss/esp32/infrastructure/ino"
 )
 
 // Trim removes all the whitespaces and returns a new string.
@@ -209,5 +209,14 @@ func TestFunctionWithIdentParam(t *testing.T) {
 		foo.Bar(1,"2",LOW);
 	}
 	`
+	Validate(source, expected, t)
+}
+
+func TestPackageImport(t *testing.T) {
+	source := `package test
+	import "github.com/andygeiss/esp32-mqtt/business/controller"
+	import "github.com/andygeiss/esp32-mqtt/business/controller/serial"
+	`
+	expected := ``
 	Validate(source, expected, t)
 }

@@ -5,8 +5,8 @@ import (
 	"io"
 	"testing"
 
-	"github.com/andygeiss/esp32-mqtt/application/transpile"
-	"github.com/andygeiss/esp32-mqtt/business/worker"
+	"github.com/andygeiss/esp32/application/transpile"
+	"github.com/andygeiss/esp32/business/worker"
 )
 
 type mockupWorker struct {

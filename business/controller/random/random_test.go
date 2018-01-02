@@ -3,7 +3,7 @@ package random_test
 import (
 	"testing"
 
-	"github.com/andygeiss/goat/business/controller/random"
+	"github.com/andygeiss/esp32/business/controller/random"
 )
 
 func TestNum(t *testing.T) {

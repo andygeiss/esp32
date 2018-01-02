@@ -6,9 +6,10 @@ import (
 	"go/parser"
 	"go/token"
 	"io"
+	"os"
 	"strings"
 
-	"github.com/andygeiss/goat/business/worker"
+	"github.com/andygeiss/esp32/business/worker"
 )
 
 const (
@@ -75,7 +76,7 @@ func (w *Worker) Start() error {
 		}
 	}
 	// Print the AST.
-	//ast.Fprint(os.Stderr, fset, file, nil)
+	ast.Fprint(os.Stderr, fset, file, nil)
 	return nil
 }
 

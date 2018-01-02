@@ -3,7 +3,7 @@ package digital_test
 import (
 	"testing"
 
-	"github.com/andygeiss/goat/business/controller/digital"
+	"github.com/andygeiss/esp32/business/controller/digital"
 )
 
 func TestDigitalWrite(t *testing.T) {

@@ -3,7 +3,7 @@ package device_test
 import (
 	"testing"
 
-	"github.com/andygeiss/esp32-mqtt/application/device"
+	"github.com/andygeiss/esp32/application/device"
 )
 
 func TestControllerSetupIsSuccessful(t *testing.T) {

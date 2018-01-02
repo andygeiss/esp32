@@ -5,7 +5,7 @@ import (
 	"io/ioutil"
 	"strings"
 
-	"github.com/andygeiss/goat/business/worker"
+	"github.com/andygeiss/esp32/business/worker"
 )
 
 // Mapping specifies the business logic to apply transformation to a specific Golang identifier by reading simple JSON map.

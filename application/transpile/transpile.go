@@ -3,8 +3,8 @@ package transpile
 import (
 	"fmt"
 
-	"github.com/andygeiss/esp32-mqtt/business/transpiler"
-	"github.com/andygeiss/esp32-mqtt/business/worker"
+	"github.com/andygeiss/esp32/business/transpiler"
+	"github.com/andygeiss/esp32/business/worker"
 )
 
 // Transpiler uses a given worker to transpile source code.

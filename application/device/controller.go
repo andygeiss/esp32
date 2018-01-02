@@ -1,8 +1,8 @@
 package device
 
 import (
-	"github.com/andygeiss/esp32-mqtt/business/controller"
-	"github.com/andygeiss/esp32-mqtt/business/controller/serial"
+	"github.com/andygeiss/esp32/business/controller"
+	"github.com/andygeiss/esp32/business/controller/serial"
 )
 
 // Controller handles the business logic and state of an ESP32.

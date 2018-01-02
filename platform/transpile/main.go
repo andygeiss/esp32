@@ -6,8 +6,8 @@ import (
 	"log"
 	"os"
 
-	"github.com/andygeiss/esp32-mqtt/application/transpile"
-	"github.com/andygeiss/esp32-mqtt/infrastructure/ino"
+	"github.com/andygeiss/esp32/application/transpile"
+	"github.com/andygeiss/esp32/infrastructure/ino"
 )
 
 var (
