@@ -3,6 +3,8 @@ package wifi_test
 import (
 	"testing"
 
+	. "github.com/andygeiss/assert"
+
 	"github.com/andygeiss/esp32/business/controller/wifi"
 )
 
@@ -10,9 +12,7 @@ func TestWifiBegin(t *testing.T) {
 	ssid := "test"
 	wifi.CurrentStatus = wifi.StatusIdle
 	wifi.Begin(ssid)
-	if wifi.CurrentStatus != wifi.StatusConnected {
-		t.Error("Status should be connected!")
-	}
+	Assert(t, wifi.CurrentStatus, IsEqual(wifi.StatusConnected))
 }
 
 func TestWifiBeginEncrypted(t *testing.T) {
@@ -20,33 +20,25 @@ func TestWifiBeginEncrypted(t *testing.T) {
 	passphrase := "passphrase"
 	wifi.CurrentStatus = wifi.StatusIdle
 	wifi.BeginEncrypted(ssid, passphrase)
-	if wifi.CurrentStatus != wifi.StatusConnected {
-		t.Error("Status should be connected!")
-	}
+	Assert(t, wifi.CurrentStatus, IsEqual(wifi.StatusConnected))
 }
 func TestWifiDisBegin(t *testing.T) {
 	ssid := "test"
 	wifi.CurrentStatus = wifi.StatusIdle
-	wifi.Begin(ssid)
-	wifi.Disconnect()
-	if wifi.CurrentStatus != wifi.StatusIdle {
-		t.Error("Status should be idle!")
-	}
+	wifi.Begin(ssid)  // StatusConnected
+	wifi.Disconnect() // back to idle?
+	Assert(t, wifi.CurrentStatus, IsEqual(wifi.StatusIdle))
 }
 
-func TestWifiRSSI(t *testing.T) {
+func TestWifiRSSIShouldBeNotMinusOne(t *testing.T) {
 	ssid := "test"
 	wifi.CurrentRSSI = -1
 	wifi.Begin(ssid)
-	if wifi.RSSI() == -1 {
-		t.Error("Signal strength should be greater than -1!")
-	}
+	Assert(t, wifi.RSSI(), IsNotEqual(-1))
 }
-func TestWifiSSID(t *testing.T) {
+func TestWifiSSIDShouldNotBeEmpty(t *testing.T) {
 	ssid := "test"
 	wifi.CurrentSSID = ""
 	wifi.Begin(ssid)
-	if wifi.SSID() == "" {
-		t.Error("SSID should not be empty!")
-	}
+	Assert(t, wifi.SSID(), IsNotEqual(""))
 }

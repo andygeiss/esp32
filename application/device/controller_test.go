@@ -3,20 +3,18 @@ package device_test
 import (
 	"testing"
 
+	. "github.com/andygeiss/assert"
+
 	"github.com/andygeiss/esp32/application/device"
 )
 
-func TestControllerSetupIsSuccessful(t *testing.T) {
+func TestControllerSetupErrorShouldBeNil(t *testing.T) {
 	ctrl := device.NewController()
-	if err := ctrl.Setup(); err != nil {
-		t.Errorf("Setup should not return an error! %v", err)
-	}
+	Assert(t, ctrl.Setup(), IsNil())
 }
 
-func TestControllerLoopIsSuccessful(t *testing.T) {
+func TestControllerLoopErrorShouldBeNil(t *testing.T) {
 	ctrl := device.NewController()
 	ctrl.Setup()
-	if err := ctrl.Loop(); err != nil {
-		t.Errorf("Loop should not return an error! %v", err)
-	}
+	Assert(t, ctrl.Loop(), IsNil())
 }

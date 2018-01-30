@@ -5,6 +5,7 @@ import (
 	"io"
 	"testing"
 
+	. "github.com/andygeiss/assert"
 	"github.com/andygeiss/esp32/application/transpile"
 	"github.com/andygeiss/esp32/business/worker"
 )
@@ -26,11 +27,9 @@ func (w *mockupWorker) Transform(source chan worker.Source) (chan worker.Target,
 	return out, nil
 }
 
-func TestTranspileShouldBeSuccessful(t *testing.T) {
+func TestTranspileErrorShouldBeNil(t *testing.T) {
 	var in, out bytes.Buffer
 	worker := &mockupWorker{&in, &out}
 	trans := transpile.NewTranspiler(worker)
-	if err := trans.Transpile(); err != nil {
-		t.Errorf("Transpile() should not return an error! [%s]", err.Error())
-	}
+	Assert(t, trans.Transpile(), IsNil())
 }

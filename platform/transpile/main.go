@@ -3,11 +3,11 @@ package main
 import (
 	"flag"
 	"fmt"
-	"log"
 	"os"
 
 	"github.com/andygeiss/esp32/application/transpile"
 	"github.com/andygeiss/esp32/infrastructure/ino"
+	"github.com/andygeiss/log"
 )
 
 var (
@@ -31,24 +31,24 @@ func main() {
 	// Read the Golang source file.
 	in, err := os.Open(*source)
 	if err != nil {
-		log.Fatalf("Go source file [%s] could not be opened! %v", *source, err)
+		log.Fatal("Go source file [%s] could not be opened! %v", *source, err)
 	}
 	defer in.Close()
 	// Create the Arduino sketch file.
 	os.Remove(*target)
 	out, err := os.OpenFile(*target, os.O_CREATE|os.O_RDWR|os.O_SYNC, 0666)
 	if err != nil {
-		log.Fatalf("Arduino sketch file [%s] could not be opened! %v", *target, err)
+		log.Fatal("Arduino sketch file [%s] could not be opened! %v", *target, err)
 	}
 	// Transpiles the Golang source into Arduino sketch.
 	m := ino.NewMapping(*mapping)
 	if err := m.Read(); err != nil {
-		log.Fatal(err)
+		log.Fatal("%v", err)
 	}
 	worker := ino.NewWorker(in, out, m)
 	trans := transpile.NewTranspiler(worker)
 	if err := trans.Transpile(); err != nil {
-		log.Fatal(err)
+		log.Fatal("%v", err)
 	}
 }
 

@@ -5,6 +5,7 @@ import (
 	"strings"
 	"testing"
 
+	. "github.com/andygeiss/assert"
 	"github.com/andygeiss/esp32/infrastructure/ino"
 )
 
@@ -22,19 +23,13 @@ func Trim(s string) string {
 func Validate(source, expected string, t *testing.T) {
 	var in, out bytes.Buffer
 	mapping := ino.NewMapping("mapping.json")
-	if err := mapping.Read(); err != nil {
-		t.Errorf("Worker should not return an error! [%s]", err.Error())
-	}
+	Assert(t, mapping.Read(), IsNil())
 	in.WriteString(source)
 	worker := ino.NewWorker(&in, &out, mapping)
-	if err := worker.Start(); err != nil {
-		t.Errorf("Worker should not return an error! [%s]", err.Error())
-	}
+	Assert(t, worker.Start(), IsNil())
 	code := out.String()
 	tcode, texpected := Trim(code), Trim(expected)
-	if tcode != texpected {
-		t.Errorf("Generated code looks not like expected!\nExpected: [%s]\nCode: [%s]", texpected, tcode)
-	}
+	Assert(t, tcode, IsEqual(texpected))
 }
 
 func TestEmptyPackage(t *testing.T) {

@@ -32,6 +32,8 @@ all: clean test build
 
 build/$(APPNAME):
 	@echo $(TS) Building $(TRANSPILER_BINARY_FILE) ...
+	@go get -u github.com/andygeiss/assert
+	@go get -u github.com/andygeiss/log
 	@go build -ldflags $(LDFLAGS) -o $(TRANSPILER_BINARY_FILE) $(TRANSPILER_SOURCE_FILE)
 	@echo $(TS) Building $(X86_BINARY_FILE) ...
 	@go build -ldflags $(LDFLAGS) -o $(X86_BINARY_FILE) $(X86_SOURCE_FILE)
