@@ -10,38 +10,51 @@ import (
 	"github.com/andygeiss/log"
 )
 
-var (
-	// APPNAME ...
-	APPNAME string
-	// BUILD ...
-	BUILD string
-	// VERSION ...
-	VERSION string
-)
-
 func main() {
+	mapping, source, target := getFlags()
+	checkFlagsAreValid(mapping, source, target)
+	safeTranspile(mapping, source, target)
+}
+
+func checkFlagsAreValid(mapping, source, target string) {
+	if mapping == "" || source == "" || target == "" {
+		flag.Usage()
+		os.Exit(1)
+	}
+}
+
+func getFlags() (string, string, string) {
 	mapping := flag.String("mapping", os.Getenv("HOME")+"/.goat.json", "API Mapping file")
 	source := flag.String("source", "", "Golang source file")
 	target := flag.String("target", "", "Arduino sketch file")
 	flag.Parse()
-	if *mapping == "" || *source == "" || *target == "" {
-		printUsage()
-		return
-	}
+	return *mapping, *source, *target
+}
+
+func printUsage() {
+	fmt.Print("This program transpiles Golang source into corresponding Arduino sketches.\n\n")
+	fmt.Print("Options:\n")
+	flag.PrintDefaults()
+	fmt.Print("\n")
+	fmt.Print("Example:\n")
+	fmt.Printf("\tesp32 -source application/blink/controller.go -target application/blink/controller.ino\n\n")
+}
+
+func safeTranspile(mapping, source, target string) {
 	// Read the Golang source file.
-	in, err := os.Open(*source)
+	in, err := os.Open(source)
 	if err != nil {
-		log.Fatal("Go source file [%s] could not be opened! %v", *source, err)
+		log.Fatal("Go source file [%s] could not be opened! %v", source, err)
 	}
 	defer in.Close()
 	// Create the Arduino sketch file.
-	os.Remove(*target)
-	out, err := os.OpenFile(*target, os.O_CREATE|os.O_RDWR|os.O_SYNC, 0666)
+	os.Remove(target)
+	out, err := os.OpenFile(target, os.O_CREATE|os.O_RDWR|os.O_SYNC, 0666)
 	if err != nil {
-		log.Fatal("Arduino sketch file [%s] could not be opened! %v", *target, err)
+		log.Fatal("Arduino sketch file [%s] could not be opened! %v", target, err)
 	}
 	// Transpiles the Golang source into Arduino sketch.
-	m := ino.NewMapping(*mapping)
+	m := ino.NewMapping(mapping)
 	if err := m.Read(); err != nil {
 		log.Fatal("%v", err)
 	}
@@ -50,14 +63,4 @@ func main() {
 	if err := trans.Transpile(); err != nil {
 		log.Fatal("%v", err)
 	}
-}
-
-func printUsage() {
-	fmt.Printf("%s %s (build %s)\n\n", APPNAME, VERSION, BUILD)
-	fmt.Print("GOAT transpiles Golang source into corresponding Arduino sketches.\n\n")
-	fmt.Print("Options:\n")
-	flag.PrintDefaults()
-	fmt.Print("\n")
-	fmt.Print("Example:\n")
-	fmt.Printf("\t%s -source application/blink/controller.go -target application/blink/controller.ino\n\n", APPNAME)
 }

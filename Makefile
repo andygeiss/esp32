@@ -1,9 +1,7 @@
 # Binary settings
 GITUSER=andygeiss
-APPNAME=$(shell cat APPNAME)
-BUILD=$(shell date -u +%Y%m%d%H%M%S)
-VERSION=$(shell cat VERSION)
-LDFLAGS="-s -X main.APPNAME=$(APPNAME) -X main.BUILD=$(BUILD) -X main.VERSION=$(VERSION)"
+APPNAME=$(shell basename `pwd`)
+LDFLAGS="-s"
 TS=$(shell date -u '+%Y/%m/%d %H:%M:%S')
 
 INO_BAUD="921600"
