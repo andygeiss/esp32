@@ -3,7 +3,17 @@ package wifi
 // @see: https://www.arduino.cc/en/Reference/WiFi
 
 // IPAddress ...
-type IPAddress struct{}
+type IPAddress struct {
+	a int
+	b int
+	c int
+	d int
+}
+
+// NewIPv4Address ...
+func NewIPv4Address(a, b, c, d int) *IPAddress {
+	return &IPAddress{a, b, c, d}
+}
 
 const (
 	// EncryptionTypeAuto ...
@@ -32,7 +42,9 @@ var (
 	// CurrentEncryptionType ...
 	CurrentEncryptionType = 7
 	// CurrentGateway ...
-	CurrentGateway = &IPAddress{}
+	CurrentGateway = &IPAddress{127, 0, 0, 255}
+	// CurrentLocalIP ...
+	CurrentLocalIP = &IPAddress{127, 0, 0, 1}
 	// CurrentNetworks ...
 	CurrentNetworks = 0
 	// CurrentRSSI ...
@@ -89,7 +101,7 @@ func HostByName(hostname string, addr string) int {
 // LocalIP gets the WiFi shield's IP address.
 // @see: https://www.arduino.cc/en/Reference/WiFiLocalIP
 func LocalIP() *IPAddress {
-	return nil
+	return CurrentLocalIP
 }
 
 // RSSI gets the signal strength of the connection to the router.

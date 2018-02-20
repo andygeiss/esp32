@@ -18,9 +18,11 @@ func TestWifiBegin(t *testing.T) {
 func TestWifiBeginEncrypted(t *testing.T) {
 	ssid := "test"
 	passphrase := "passphrase"
+	ipv4 := wifi.NewIPv4Address(127, 0, 0, 1)
 	wifi.CurrentStatus = wifi.StatusIdle
 	wifi.BeginEncrypted(ssid, passphrase)
 	Assert(t, wifi.CurrentStatus, IsEqual(wifi.StatusConnected))
+	Assert(t, wifi.CurrentLocalIP, IsEqual(ipv4))
 }
 func TestWifiDisBegin(t *testing.T) {
 	ssid := "test"
