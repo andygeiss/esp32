@@ -4,51 +4,14 @@
 
 Build your own toolchain to develop, test, build and finally deploy a Golang controller to your ESP32 device.
 
-## Why Golang? Arduino is super easy!
+## Purpose
 
-The [Arduino IDE](https://www.arduino.cc/en/Main/Software) sure is easy to use.
+The [Arduino IDE](https://www.arduino.cc/en/Main/Software) is easy to use.
+But I faced problems like maintainability and testability at more complicated IoT projects.
+I needed to compile and flash the ESP32 before testing my code functionality by doing it 100% manually.
 
-But my Problem is not usability.
-I faced problems at more complicated projects like "Implementing a Robot with X sensors, WiFi and MQTT", because
-I needed to compile (syntax is ok) and flash the ESP before testing my code functionality (doing it 100% manually).
-
-I assume that our IoT projects will be more complicated and harder to maintain over time.
-I simply want to ensure that the functionality of my code is working BEFORE flashing the ESP32!
-
-So I decided to provide a solution to write your IoT code in Golang by using all its powerful package like testing.
-
-## Examples
-
-Look at the following Arduino [ESP32 LED Blink Example Code](https://circuits4you.com/2018/02/02/esp32-led-blink-example/):
-
-    #define LED 2
-
-    void setup() {
-        pinMode(LED,OUTPUT);
-    }
-
-    void loop() {
-        delay(500);
-        digitalWrite(LED,HIGH);
-        delay(500);
-        digitalWrite(LED,LOW);
-    }
-
-This could be implemented in Golang (see <code>application/device/controller</code>) like that:
-
-
-    func (c *Controller) Setup() error {
-        digital.PinMode(2, digital.ModeOutput)
-        return nil
-    }
-
-    func (c *Controller) Loop() error {
-        timer.Delay(500)
-        digital.Write(2, digital.High)
-        timer.Delay(500)
-        digital.Write(2, digital.Low)
-        return nil
-    }
+This solution transpiles Golang into Arduino code, which can be compiled to an image by using the ESP32 toolchain.
+Now I am able to use a fully automated testing approach instead of doing it 100% manually.
 
 ## Process
 
