@@ -1,8 +1,8 @@
 package main
 
 import (
+	controller "github.com/andygeiss/esp32-controller"
 	"github.com/andygeiss/esp32/application/device"
-	"github.com/andygeiss/esp32/business/controller"
 	"github.com/andygeiss/log"
 )
 

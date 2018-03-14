@@ -25,9 +25,11 @@ Now I am able to use a fully automated testing approach instead of doing it 100%
 
 ## Installation
 
-First download and install the latest [Arduino IDE](https://www.arduino.cc/en/Main/Software) into <code>/opt/arduino</code> or change <code>INO_IDE_PATH</code> in the <code>Makefile</code>. Next run the ESP32 SDK-Installation:
+First download and install the latest [Arduino IDE](https://www.arduino.cc/en/Main/Software) into <code>/opt/arduino</code> or change <code>INO_IDE_PATH</code> in the <code>Makefile</code>.
 
-    make install
+Next run the Transpiler and ESP32 SDK-Installation:
+
+    make packages
 
 ## Develop, Test and Build
 
@@ -35,15 +37,17 @@ Modify the Controller at <code>application/device/controller.go</code> and start
 
     make
 
-This will create the following binary outputs:
+Run <code>device-${ARCH}</code> to simulate your ESP32 device locally.
 
-    build/
-    ├── device.img
-    ├── device.ino
-    ├── device-x86_64.bin
-    └── transpile
-
-Run <code>device-x86_64.bin</code> to simulate your ESP32 device locally. 
+    2018/03/14 15:05:09 Running esp32 ...
+    Setting up PIN 2 -> OUTPUT
+    Done.
+      Write PIN 2 -> HIGH
+      Write PIN 2 -> LOW
+      Write PIN 2 -> HIGH
+      Write PIN 2 -> LOW
+      Write PIN 2 -> HIGH
+      Write PIN 2 -> LOW
 
 ## Deploy
 
