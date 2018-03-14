@@ -8,7 +8,8 @@ Build your own toolchain to develop, test, build and finally deploy a Golang con
 
 The [Arduino IDE](https://www.arduino.cc/en/Main/Software) sure is easy to use.
 But lets talk about maintainability at complicated projects like "Implementing a Robot with X sensors, WiFi and MQTT"?
-I simply want to ensure that the functionality of my code is working BEFORE flashing the ESP32.
+
+I simply want to ensure that the functionality of my code is working BEFORE flashing the ESP32!
 
 ## Examples
 
