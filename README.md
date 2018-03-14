@@ -4,12 +4,18 @@
 
 Build your own toolchain to develop, test, build and finally deploy a Golang controller to your ESP32 device.
 
-## Why Go? Arduino is super easy!
+## Why Golang? Arduino is super easy!
 
 The [Arduino IDE](https://www.arduino.cc/en/Main/Software) sure is easy to use.
-But lets talk about maintainability at complicated projects like "Implementing a Robot with X sensors, WiFi and MQTT"?
 
+But my Problem is not usability.
+I faced problems at more complicated projects like "Implementing a Robot with X sensors, WiFi and MQTT", because
+I needed to compile (syntax is ok) and flash the ESP before testing my code functionality (doing it 100% manually).
+
+I assume that our IoT projects will be more complicated and harder to maintain over time.
 I simply want to ensure that the functionality of my code is working BEFORE flashing the ESP32!
+
+So I decided to provide a solution to write your IoT code in Golang by using all its powerful package like testing.
 
 ## Examples
 
