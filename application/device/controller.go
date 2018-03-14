@@ -2,10 +2,8 @@ package device
 
 import (
 	"github.com/andygeiss/esp32/business/controller"
-	"github.com/andygeiss/esp32/business/controller/serial"
-	"github.com/andygeiss/esp32/business/controller/timer"
-	wifi "github.com/andygeiss/esp32/business/controller/wifi"
 	"github.com/andygeiss/esp32/business/controller/digital"
+	"github.com/andygeiss/esp32/business/controller/timer"
 )
 
 // Controller handles the business logic and state of an ESP32.
@@ -31,4 +29,3 @@ func (c *Controller) Setup() error {
 	digital.PinMode(2, digital.ModeOutput)
 	return nil
 }
-
