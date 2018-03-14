@@ -4,9 +4,15 @@
 
 Build your own toolchain to develop, test, build and finally deploy a Golang controller to your ESP32 device.
 
+## Why Go? Arduino is super easy!
+
+The [Arduino IDE](https://www.arduino.cc/en/Main/Software) sure is easy to use.
+But lets talk about maintainability at complicated projects like "Implementing a Robot with X sensors, WiFi and MQTT"?
+I simply want to ensure that the functionality of my code is working BEFORE flashing the ESP32.
+
 ## Examples
 
-Look at the following [ESP32 LED Blink Example Code](https://circuits4you.com/2018/02/02/esp32-led-blink-example/):
+Look at the following Arduino [ESP32 LED Blink Example Code](https://circuits4you.com/2018/02/02/esp32-led-blink-example/):
 
     #define LED 2
 
@@ -21,7 +27,7 @@ Look at the following [ESP32 LED Blink Example Code](https://circuits4you.com/20
         digitalWrite(LED,LOW);
     }
 
-This could be implemented (see <code>application/device/controller</code>) like that:
+This could be implemented in Golang (see <code>application/device/controller</code>) like that:
 
 
     func (c *Controller) Setup() error {
