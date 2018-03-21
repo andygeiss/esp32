@@ -27,9 +27,16 @@ Now I am able to use a fully automated testing approach instead of doing it 100%
 
 First download and install the latest [Arduino IDE](https://www.arduino.cc/en/Main/Software) into <code>/opt/arduino</code> or change <code>INO_IDE_PATH</code> in the <code>Makefile</code>.
 
-Next run the Transpiler and ESP32 SDK-Installation:
+Next run the ESP32 SDK-Installation:
 
     make packages
+
+Finally install the Transpiler:
+
+    cd $GOPATH/src/github.com/andygeiss/
+    git clone https://github.com/andygeiss/esp32-transpiler.git
+    cd esp32-transpiler
+    make packages && make && make install
 
 ## Develop, Test and Build
 
