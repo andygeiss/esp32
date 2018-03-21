@@ -37,7 +37,7 @@ Modify the Controller at <code>application/device/controller.go</code> and start
 
     make
 
-Run <code>device-${ARCH}</code> to simulate your ESP32 device locally.
+Run the binary at <code>build/device-${ARCH}</code> to simulate your ESP32 device locally.
 
     2018/03/14 15:05:09 Running esp32 ...
     Setting up PIN 2 -> OUTPUT
