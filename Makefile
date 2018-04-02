@@ -12,7 +12,7 @@ INO_PORT="/dev/ttyUSB0"
 INO_SDK_PATH="$(INO_HARDWARE_PATH)/$(INO_MANUFACTURER)/$(INO_BOARD)"
 INO_SKETCH_FILE=build/device.ino
 INO_SKETCH_IMAGE=build/device.img
-INO_SOURCE_FILE=application/device/controller.go
+INO_SOURCE_FILE=device/controller.go
 INO_TOOLS_PATH="$(INO_HARDWARE_PATH)/espressif/$(INO_BOARD)/tools"
 INO_TOOLS_BUILD="$(INO_TOOLS_PATH)/build.py"
 INO_TOOLS_FLASH="$(INO_TOOLS_PATH)/esptool.py"
@@ -21,7 +21,7 @@ all: clean test build
 
 build/$(APPNAME):
 	@echo $(TS) Building local device ...
-	@go build -ldflags $(LDFLAGS) -o build/$(APPNAME)-$(ARCH) platform/main/main.go
+	@go build -ldflags $(LDFLAGS) -o build/$(APPNAME)-$(ARCH) main/main.go
 	@echo $(TS) Building $(INO_SKETCH_FILE) ...
 	@esp32-transpiler -source $(INO_SOURCE_FILE) -target $(INO_SKETCH_FILE)
 	@echo $(TS) Building $(INO_SKETCH_IMAGE) ...

@@ -2,7 +2,7 @@ package device_test
 
 import (
 	. "github.com/andygeiss/assert"
-	"github.com/andygeiss/esp32/application/device"
+	"github.com/andygeiss/esp32/device"
 	"testing"
 )
 
