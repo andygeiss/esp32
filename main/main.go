@@ -3,7 +3,7 @@ package main
 import (
 	controller "github.com/andygeiss/esp32-controller"
 	"github.com/andygeiss/esp32/device"
-	"github.com/andygeiss/log"
+	log "github.com/andygeiss/log/impl"
 )
 
 func main() {
