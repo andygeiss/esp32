@@ -7,7 +7,7 @@ import (
 	"github.com/andygeiss/esp32-controller/serial"
 )
 
-// Controller handles the business logic and state of an ESP32.
+// Controller handles the api logic and state of an ESP32.
 type Controller struct {
 }
 

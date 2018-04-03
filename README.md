@@ -31,13 +31,6 @@ Next run the ESP32 SDK-Installation:
 
     make packages
 
-Finally install the Transpiler:
-
-    cd $GOPATH/src/github.com/andygeiss/
-    git clone https://github.com/andygeiss/esp32-transpiler.git
-    cd esp32-transpiler
-    make packages && make && make install
-
 ## Develop, Test and Build
 
 Modify the Controller at <code>application/device/controller.go</code> and start the build process by using: 
