@@ -42,8 +42,6 @@ flash:
 
 packages:
 	@echo $(TS) Installing Go packages ...
-	@go get -u github.com/andygeiss/assert
-	@go get -u github.com/andygeiss/log
 	@go get -u github.com/andygeiss/esp32-controller
 	@go get -u github.com/andygeiss/esp32-transpiler
 	@echo $(TS) Installing SDK ...
