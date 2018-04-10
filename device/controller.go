@@ -3,8 +3,8 @@ package device
 import (
 	controller "github.com/andygeiss/esp32-controller"
 	"github.com/andygeiss/esp32-controller/digital"
-	"github.com/andygeiss/esp32-controller/timer"
 	"github.com/andygeiss/esp32-controller/serial"
+	"github.com/andygeiss/esp32-controller/timer"
 )
 
 // Controller handles the api logic and state of an ESP32.
