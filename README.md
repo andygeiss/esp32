@@ -21,7 +21,7 @@ Now I am able to use a fully automated testing approach instead of doing it 100%
 
               make                make flash
 
-**Important**: The Transpiler only supports a small subset of the [Golang Language Specification](https://golang.org/ref/spec). Look at the tests in <code>infrastructure/ino/worker_test.go</code> for more information.
+**Important**: The Transpiler only supports a small subset of the [Golang Language Specification](https://golang.org/ref/spec). 
 
 ## Installation
 
