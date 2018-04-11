@@ -1,27 +1,19 @@
 package main
 
 import (
-	controller "github.com/andygeiss/esp32-controller"
+	"fmt"
 	"github.com/andygeiss/esp32/device"
-	log "github.com/andygeiss/log/impl"
+	"os"
 )
 
 func main() {
 	ctrl := device.NewController()
-	safeSetup(ctrl)
-	for {
-		safeLoop(ctrl)
-	}
-}
-
-func safeLoop(ctrl controller.Controller) {
-	if err := ctrl.Loop(); err != nil {
-		log.Fatal("%v", err)
-	}
-}
-
-func safeSetup(ctrl controller.Controller) {
 	if err := ctrl.Setup(); err != nil {
-		log.Fatal("%v", err)
+		fmt.Fprintf(os.Stderr, "Error on Setup: %s", err.Error())
+	}
+	for {
+		if err := ctrl.Loop(); err != nil {
+			fmt.Fprintf(os.Stderr, "Error on Loop: %s", err.Error())
+		}
 	}
 }
