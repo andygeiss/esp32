@@ -31,7 +31,7 @@ Next run the ESP32 SDK-Installation:
 
     make packages
 
-[Examples](https://github.com/andygeiss/esp32/tree/master/examples) will be available at the <code>examples</code> sub-directory.
+Look at the [examples](https://github.com/andygeiss/esp32/tree/master/examples) for more information.
 
 ## Develop, Test and Build
 
