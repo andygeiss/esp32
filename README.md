@@ -31,23 +31,18 @@ Next run the ESP32 SDK-Installation:
 
     make packages
 
+[Examples](https://github.com/andygeiss/esp32/tree/master/examples) will be available at the <code>examples</code> sub-directory.
+
 ## Develop, Test and Build
 
-Modify the Controller at <code>application/device/controller.go</code> and start the build process by using: 
+Change the "SSID" and "PASS" strings at <code>application/device/controller.go</code> to your WiFi Access Point and start the build process by using:
 
     make
-
+    
 Run the binary at <code>build/device-${ARCH}</code> to simulate your ESP32 device locally.
 
-    2018/03/14 15:05:09 Running esp32 ...
-    Setting up PIN 2 -> OUTPUT
-    Done.
-      Write PIN 2 -> HIGH
-      Write PIN 2 -> LOW
-      Write PIN 2 -> HIGH
-      Write PIN 2 -> LOW
-      Write PIN 2 -> HIGH
-      Write PIN 2 -> LOW
+    Connecting to WiFi 
+     Connected!
 
 ## Deploy
 
