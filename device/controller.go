@@ -26,7 +26,6 @@ func (c *Controller) Loop() error {
 	serial.Print(" ...")
 	if (client.Connect(host, 443) == wifi.StatusConnected) {
 		serial.Println(" Connected!")
-		return nil
 	} else {
 		serial.Println(" Failed!")
 	}
