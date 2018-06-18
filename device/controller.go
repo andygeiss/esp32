@@ -24,7 +24,7 @@ func (c *Controller) Loop() error {
 // Setup code will be called once.
 func (c *Controller) Setup() error {
 	serial.Begin(serial.BaudRate115200)
-	serial.Println("Connecting to WiFi ")
+	serial.Print("Connecting to WiFi ")
 	wifi.BeginEncrypted("SSID", "PASS")
 	for wifi.Status() != wifi.StatusConnected {
 		serial.Print(".")

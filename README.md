@@ -41,8 +41,7 @@ Change the "SSID" and "PASS" strings at <code>application/device/controller.go</
     
 Run the binary at <code>build/device-${ARCH}</code> to simulate your ESP32 device locally.
 
-    Connecting to WiFi 
-     Connected!
+    Connecting to WiFi ...... Connected!
 
 ## Deploy
 
