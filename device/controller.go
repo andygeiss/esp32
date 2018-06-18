@@ -11,6 +11,9 @@ import (
 type Controller struct {
 }
 
+const host string = "www.google.com"
+var client wifi.Client
+
 // NewController creates a new controller and returns its address.
 func NewController() controller.Controller {
 	return &Controller{}
@@ -18,13 +21,22 @@ func NewController() controller.Controller {
 
 // Loop code will be called repeatedly.
 func (c *Controller) Loop() error {
+	serial.Print("Connecting to ")
+	serial.Print(host)
+	serial.Print(" ...")
+	if (client.Connect(host, 443) == wifi.StatusConnected) {
+		serial.Println(" Connected!")
+		return nil
+	} else {
+		serial.Println(" Failed!")
+	}
 	return nil
 }
 
 // Setup code will be called once.
 func (c *Controller) Setup() error {
 	serial.Begin(serial.BaudRate115200)
-	serial.Print("Connecting to WiFi ")
+	serial.Print("Connecting to WiFi ...")
 	wifi.BeginEncrypted("SSID", "PASS")
 	for wifi.Status() != wifi.StatusConnected {
 		serial.Print(".")
