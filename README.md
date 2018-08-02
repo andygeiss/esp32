@@ -35,7 +35,11 @@ Look at the [examples](https://github.com/andygeiss/esp32/tree/master/examples) 
 
 ## Develop, Test and Build
 
-Change the "SSID" and "PASS" strings at <code>application/device/controller.go</code> to your WiFi Access Point and start the build process by using:
+Change the Arduino port to your current settings by changing the <code>Makefile</code>:
+
+    INO_PORT="/dev/ttyUSB0"
+
+Also set the <code>SSID</code> and <code>PASS</code> strings at <code>application/device/controller.go</code> to your WiFi Access Point and start the build process by using:
 
     make
     
