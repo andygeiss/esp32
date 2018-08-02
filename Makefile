@@ -53,6 +53,9 @@ packages:
 	@rm -f $(INO_SDK_PATH)/tools/xtensa.tar.gz
 	@git clone --recursive https://github.com/espressif/esp-idf.git $(INO_SDK_PATH)/framework
 	@sudo apt-get update && sudo apt-get install -y bison flex git gperf libncurses-dev make python python-serial
+	@echo $(TS) Adding symbolic link ...
+	@mkdir -o $(INO_SDK_PATH)/tools/esptool
+	@ln -sf $(INO_SDK_PATH)/tools/esptool.py $(INO_SDK_PATH)/tools/esptool/
 	@echo $(TS) Done.
 
 run:
