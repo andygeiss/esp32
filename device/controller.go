@@ -3,15 +3,20 @@ package device
 import (
 	controller "github.com/andygeiss/esp32-controller"
 	"github.com/andygeiss/esp32-controller/serial"
-	wifi "github.com/andygeiss/esp32-controller/wifi"
 	"github.com/andygeiss/esp32-controller/timer"
+	wifi "github.com/andygeiss/esp32-controller/wifi"
 )
 
 // Controller handles the api logic and state of an ESP32.
 type Controller struct {
 }
 
-const host string = "www.google.com"
+const ssid string = "SSID"
+const pass string = "PASSPHRASE"
+const host string = "HOSTNAME"
+const port int = 3000
+const request string = "GET /index.html HTTP/1.0\r\n\r\n"
+
 var client wifi.Client
 
 // NewController creates a new controller and returns its address.
@@ -21,18 +26,18 @@ func NewController() controller.Controller {
 
 // Loop code will be called repeatedly.
 func (c *Controller) Loop() error {
-	serial.Print("Connecting to ")
+	serial.Print("Connecting to [")
 	serial.Print(host)
-	serial.Print(" ...")
-	if (client.Connect(host, 443) == wifi.StatusConnected) {
+	serial.Print(":")
+	serial.Print(port)
+	serial.Print(")] ...")
+	if client.Connect(host, port) {
 		serial.Println(" Connected!")
-		client.Write("GET / HTTP/1.1\r\n")
-		client.Write("Host: ")
-		client.Write(host)
-		client.Write("\r\n\r\n\r\n")
+		client.Println(request)
 	} else {
 		serial.Println(" Failed!")
 	}
+	timer.Delay(5000)
 	return nil
 }
 
@@ -40,8 +45,8 @@ func (c *Controller) Loop() error {
 func (c *Controller) Setup() error {
 	serial.Begin(serial.BaudRate115200)
 	serial.Print("Connecting to WiFi ...")
-	wifi.BeginEncrypted("SSID", "PASS")
 	for wifi.Status() != wifi.StatusConnected {
+		wifi.BeginEncrypted(ssid, pass)
 		serial.Print(".")
 		timer.Delay(1000)
 	}
