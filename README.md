@@ -25,7 +25,16 @@ Now I am able to use a fully automated testing approach instead of doing it 100%
 
 ## Installation
 
-First download and install the latest [Arduino IDE](https://www.arduino.cc/en/Main/Software) into <code>/opt/arduino</code> or change <code>INO_IDE_PATH</code> in the <code>Makefile</code>.
+First download and install the latest [Arduino IDE](https://www.arduino.cc/en/Main/Software) into <code>/opt/arduino</code> or change <code>INO_IDE_PATH</code> in the <code>Makefile</code>
+and necessary packages.
+ 
+- **Ubuntu**:
+
+        sudo apt-get install -y bison flex git gperf libncurses-dev make python
+	
+- **Manjaro**:
+
+        sudo pip install pyserial
 
 Next run the ESP32 SDK-Installation:
 
