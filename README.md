@@ -58,11 +58,11 @@ Run the binary at <code>build/device-${ARCH}</code> to simulate your ESP32 devic
 
 ## Deploy
 
-Finally use the following command to deploy the encrypted <code>device.img</code> to your real ESP32 device.
+Finally use the following command to deploy the image <code>device.img</code> to your real ESP32 device.
 
     make flash
 
-**Important**: PLease ensure that the current user is in the <code>dialout</code> group. Or you will receive a <code>permission denied</code>.
+**Important**: Please ensure that the current user is in the <code>dialout</code> group. Or you will receive a <code>permission denied</code>.
 
 This will create the following output:
 
