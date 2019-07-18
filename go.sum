@@ -1,5 +1,5 @@
-github.com/andygeiss/assert v0.0.3/go.mod h1:ztUvWrfUo43X0zMA1XfX8esn5Uavk6ANSKTT0w2qvAI=
-github.com/andygeiss/assert v0.0.6 h1:FyiAIudVwnxp55GIcNOaZ2ABr8n2RI9SXmaXG7+Y53o=
 github.com/andygeiss/assert v0.0.6/go.mod h1:ztUvWrfUo43X0zMA1XfX8esn5Uavk6ANSKTT0w2qvAI=
-github.com/andygeiss/esp32-controller v0.0.1 h1:y9GCgCD8CBVRC8CD8w/UydgsA0S2rfvOvQkfe3N8a8s=
-github.com/andygeiss/esp32-controller v0.0.1/go.mod h1:sb9Q7FWSZQzlEsqCMuMr52Huw6eaRFr5+tzpcPZAqOo=
+github.com/andygeiss/assert v0.0.7 h1:z6+F+CfaeEyC48nSe7kstV8nOl4edUrhpqPIBzc4C4c=
+github.com/andygeiss/assert v0.0.7/go.mod h1:ztUvWrfUo43X0zMA1XfX8esn5Uavk6ANSKTT0w2qvAI=
+github.com/andygeiss/esp32-controller v0.0.2 h1:PX+hOW3ZVdnBnbtqCqPJkotv8Oie5m7xhtPP9gOPMAU=
+github.com/andygeiss/esp32-controller v0.0.2/go.mod h1:T2MNTWCrhzio8/rP0FbwKRbrkUY4adcyY7z6hpc4iUk=
