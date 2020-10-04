@@ -1,9 +1,10 @@
 package device_test
 
 import (
-	"github.com/andygeiss/assert"
-	"github.com/andygeiss/esp32/device"
 	"testing"
+
+	"github.com/andygeiss/esp32/device"
+	"github.com/andygeiss/esp32/pkg/assert"
 )
 
 func TestControllerSetupErrorShouldBeNil(t *testing.T) {
