@@ -1,8 +1,8 @@
 module github.com/andygeiss/esp32
 
-go 1.14
+go 1.18
 
 require (
-	github.com/andygeiss/assert v0.0.9
-	github.com/andygeiss/esp32-controller v0.0.3
+	github.com/andygeiss/esp32-controller v0.1.0
+	github.com/andygeiss/utils v0.1.1
 )

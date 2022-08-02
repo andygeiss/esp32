@@ -4,7 +4,7 @@ import (
 	"testing"
 
 	"github.com/andygeiss/esp32/device"
-	"github.com/andygeiss/esp32/pkg/assert"
+	"github.com/andygeiss/utils/assert"
 )
 
 func TestControllerSetupErrorShouldBeNil(t *testing.T) {
