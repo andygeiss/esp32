@@ -4,7 +4,6 @@
 [![](https://img.shields.io/github/v/release/andygeiss/esp32)](https://github.com/andygeiss/esp32/releases)
 [![](https://img.shields.io/codeclimate/tech-debt/andygeiss/esp32)](https://github.com/andygeiss/esp32)
 [![](https://goreportcard.com/badge/github.com/andygeiss/esp32)](https://goreportcard.com/report/github.com/andygeiss/esp32)
-[![BCH compliance](https://bettercodehub.com/edge/badge/andygeiss/esp32?branch=master)](https://bettercodehub.com/)
 
 Build your own toolchain to develop, test, build and finally deploy a Golang controller to your ESP32 device.
 
