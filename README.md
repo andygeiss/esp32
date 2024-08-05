@@ -1,9 +1,9 @@
 # ESP32
 
-[![](https://img.shields.io/github/license/andygeiss/esp32)](https://github.com/andygeiss/esp32/blob/master/LICENSE)
-[![](https://img.shields.io/github/v/release/andygeiss/esp32)](https://github.com/andygeiss/esp32/releases)
-[![](https://img.shields.io/codeclimate/tech-debt/andygeiss/esp32)](https://github.com/andygeiss/esp32)
-[![](https://goreportcard.com/badge/github.com/andygeiss/esp32)](https://goreportcard.com/report/github.com/andygeiss/esp32)
+[![License](https://img.shields.io/github/license/andygeiss/esp32)](https://github.com/andygeiss/esp32/blob/master/LICENSE)
+[![Releases](https://img.shields.io/github/v/release/andygeiss/esp32)](https://github.com/andygeiss/esp32/releases)
+[![Go Report Card](https://goreportcard.com/badge/github.com/andygeiss/esp32)](https://goreportcard.com/report/github.com/andygeiss/esp32)
+[![Maintainability](https://api.codeclimate.com/v1/badges/25eafcae9797d5e8a3de/maintainability)](https://codeclimate.com/github/andygeiss/esp32/maintainability)
 
 Build your own toolchain to develop, test, build and finally deploy a Golang controller to your ESP32 device.
 
@@ -24,17 +24,17 @@ Now I am able to use a fully automated testing approach instead of doing it 100%
 
               make                make flash
 
-**Important**: The Transpiler only supports a small subset of the [Golang Language Specification](https://golang.org/ref/spec). 
+**Important**: The Transpiler only supports a small subset of the [Golang Language Specification](https://golang.org/ref/spec).
 
 ## Installation
 
 First download and install the latest [Arduino IDE](https://www.arduino.cc/en/Main/Software) into <code>/opt/arduino</code> or change <code>INO_IDE_PATH</code> in the <code>Makefile</code>
 and necessary packages.
- 
+
 - **Ubuntu**:
 
         sudo apt-get install -y bison flex git gperf libncurses-dev make python
-	
+
 - **Manjaro**:
 
         sudo pip install pyserial
@@ -54,7 +54,7 @@ Change the Arduino port to your current settings by changing the <code>Makefile<
 Also set the <code>SSID</code> and <code>PASS</code> strings at <code>application/device/controller.go</code> to your WiFi Access Point and start the build process by using:
 
     make
-    
+
 Run the binary at <code>build/device-${ARCH}</code> to simulate your ESP32 device locally.
 
     Connecting to WiFi ...... Connected!
@@ -83,7 +83,7 @@ This will create the following output:
     Compressed 607456 bytes to 366770...
     Wrote 607456 bytes (366770 compressed) at 0x00010000 in 5.9 seconds (effective 816.9 kbit/s)...
     Hash of data verified.
-    
+
     Leaving...
     Hard resetting via RTS pin...
     2018/08/05 16:04:22 Done.
