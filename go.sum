@@ -1,4 +1,6 @@
-github.com/andygeiss/esp32-controller v0.1.0 h1:o+SaEmOA3Sh3Qhxf7xqUpouE9Y39AneYEYrjdP6twAI=
-github.com/andygeiss/esp32-controller v0.1.0/go.mod h1:5bEu/i+U9pklziFmp1rJ8ijpz43Gzyz3jmL8+UrI+ys=
+github.com/andygeiss/cloud-native-utils v0.2.12 h1:f+vNz4TE9AqNURDRm4GTJLipE7zRQbIa3wc3Xvwq6L4=
+github.com/andygeiss/cloud-native-utils v0.2.12/go.mod h1:tBQl1eiRaTL4s6ixPYrQhu3gqRsBrvqdaVaV6zSJNLE=
+github.com/andygeiss/esp32-controller v0.1.1 h1:FdES/jwZvirwle4FxlTCx/vGr/ahpTMakMbZDpQ4EzQ=
+github.com/andygeiss/esp32-controller v0.1.1/go.mod h1:zYDL3KM4zyGyWJlHvpytDnmWMAfsG8l9scVngatnD4Y=
 github.com/andygeiss/utils v0.9.1 h1:PFFgmdwNDO2/bHA/4F7/fozifH+lPyuMBAhsBuTLGf8=
 github.com/andygeiss/utils v0.9.1/go.mod h1:Jatj6UsFNUMgf+9vPeMZ9il72nARlhMvc54r7AiPPiU=
