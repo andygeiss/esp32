@@ -1,23 +1,21 @@
-// Package device holds the controller that runs on the ESP32. This is the file
-// you edit.
+// Package device holds the controller that runs on the ESP32. controller.go is
+// the file you edit.
 //
 // Only controller.go is transpiled to an Arduino sketch, and the transpiler
-// understands a small subset of Go. Keep to what is already here — plain
-// functions, constants, package-level variables and calls into
-// esp32-controller. Anything from the standard library, and anything the
-// simulator needs, belongs in another package.
+// understands a small subset of Go: plain functions, constants, package-level
+// variables and calls into esp32-controller. It refuses anything else by name
+// and line rather than pass over it, so a type, a method, a range loop or a
+// call into the standard library stops `make firmware` instead of reaching the
+// board. Setup and Loop are plain functions here for that reason; program.go
+// wraps them in the interface the simulator runs, and the transpiler never
+// reads that file.
 package device
 
 import (
-	controller "github.com/andygeiss/esp32-controller"
 	"github.com/andygeiss/esp32-controller/serial"
 	"github.com/andygeiss/esp32-controller/timer"
 	wifi "github.com/andygeiss/esp32-controller/wifi"
 )
-
-// Controller handles the api logic and state of an ESP32.
-type Controller struct {
-}
 
 const ssid string = "SSID"
 const pass string = "PASSPHRASE"
@@ -27,13 +25,8 @@ const request string = "GET /index.html HTTP/1.0\r\n\r\n"
 
 var client wifi.Client
 
-// NewController creates a new controller and returns its address.
-func NewController() controller.Controller {
-	return &Controller{}
-}
-
 // Loop code will be called repeatedly.
-func (c *Controller) Loop() error {
+func Loop() error {
 	serial.Print("Connecting to [")
 	serial.Print(host)
 	serial.Print(":")
@@ -50,7 +43,7 @@ func (c *Controller) Loop() error {
 }
 
 // Setup code will be called once.
-func (c *Controller) Setup() error {
+func Setup() error {
 	serial.Begin(serial.BaudRate115200)
 	serial.Print("Connecting to WiFi ...")
 	for wifi.Status() != wifi.StatusConnected {

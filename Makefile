@@ -11,7 +11,7 @@ TARGET = esp32
 
 # The tool that turns the controller into an Arduino sketch. Pinned like a
 # dependency rather than floated like a linter: its output is the firmware.
-TRANSPILER = github.com/andygeiss/esp32-transpiler@v0.2.0
+TRANSPILER = github.com/andygeiss/esp32-transpiler@v0.3.1
 
 # Targets are alphabetical, so the default is named rather than first.
 .DEFAULT_GOAL = check

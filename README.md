@@ -44,21 +44,35 @@ That gives you the controller *from this repository*. Yours lives in
 ## Write your own controller
 
 Edit `internal/device/controller.go`. `Setup` runs once, `Loop` runs forever —
-the same two functions an Arduino sketch has. Set `ssid` and `pass` to your own
-access point while you are in there.
+the same two functions an Arduino sketch has, and here they are plain
+package-level functions. Set `ssid` and `pass` to your own access point while
+you are in there.
 
 `examples/blink/controller.go` is a smaller starting point that flashes the LED
 on pin 2. Copy it over `internal/device/controller.go` and change its package
-line to `device`.
+line to `device`. It holds nothing else, so that is the whole edit.
 
 **The transpiler reads that one file, and it understands only a small subset of
 [the Go language spec](https://go.dev/ref/spec).** Stick to plain functions,
-constants, package-level variables and calls into `esp32-controller`. The
+constants, package-level variables and calls into `esp32-controller`. **A type
+declaration and a method are both outside it** — that is why `Setup` and `Loop`
+are functions rather than methods on a `Controller`, and why the interface the
+simulator runs lives next door in `internal/device/program.go`, which the
+transpiler never reads. The
 [mapping](https://github.com/andygeiss/esp32-transpiler/blob/master/internal/transpile/handlers/mapping.go)
 and the
 [tests](https://github.com/andygeiss/esp32-transpiler/blob/master/internal/transpile/service_test.go)
 say what it can do today. Anything else — the standard library, generics, a
 context — belongs in another package.
+
+Get it wrong and `make firmware` stops with the construct and the line it sits
+on, and writes no sketch:
+
+    esp32-transpiler: internal/device/controller.go:19:1: a type declaration is not supported
+
+That refusal is the point. A construct the tool passed over in silence would
+reach the board as a sketch that compiles and does something other than the Go
+said, which is exactly what `go test` was run to rule out.
 
 ## Test it
 
@@ -144,7 +158,8 @@ ever boots. There is nothing left to configure at run time.
     ├── internal/
     │   ├── device/
     │   │   ├── controller.go        ← the file you edit; the only file transpiled
-    │   │   └── controller_test.go
+    │   │   ├── controller_test.go
+    │   │   └── program.go           ← wraps it in the interface the simulator runs
     │   └── simulator/
     │       ├── simulator.go         ← setup once, then loop, on this machine
     │       └── simulator_test.go

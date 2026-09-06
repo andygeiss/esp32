@@ -19,7 +19,7 @@ func TestSetupConnectsToWifi(t *testing.T) {
 		wifi.CurrentStatus = wifi.StatusIdle
 		serial.Baud = 0
 
-		if err := device.NewController().Setup(); err != nil {
+		if err := device.Setup(); err != nil {
 			t.Fatalf("Setup: %v", err)
 		}
 
@@ -34,13 +34,39 @@ func TestSetupConnectsToWifi(t *testing.T) {
 
 func TestLoopReturnsNoError(t *testing.T) {
 	synctest.Test(t, func(t *testing.T) {
-		ctrl := device.NewController()
-		if err := ctrl.Setup(); err != nil {
+		if err := device.Setup(); err != nil {
 			t.Fatalf("Setup: %v", err)
 		}
 
-		if err := ctrl.Loop(); err != nil {
+		if err := device.Loop(); err != nil {
 			t.Errorf("Loop: got %v, want nil", err)
+		}
+	})
+}
+
+// The simulator runs NewController, the board runs the transpiled functions.
+// This holds the two together: a wrapper that called something else, or
+// nothing, would pass every test above.
+func TestNewControllerRunsTheTranspiledFunctions(t *testing.T) {
+	synctest.Test(t, func(t *testing.T) {
+		wifi.CurrentStatus = wifi.StatusIdle
+		serial.Baud = 0
+		c := device.NewController()
+
+		if err := c.Setup(); err != nil {
+			t.Fatalf("Setup: %v", err)
+		}
+		if err := c.Loop(); err != nil {
+			t.Fatalf("Loop: %v", err)
+		}
+
+		// Only device.Setup sets the baud rate, so a wrapper that skipped it
+		// leaves this at zero.
+		if got, want := serial.Baud, serial.BaudRate115200; got != want {
+			t.Errorf("baud rate: got %v, want %v", got, want)
+		}
+		if got, want := wifi.Status(), wifi.StatusConnected; got != want {
+			t.Errorf("wifi status: got %v, want %v", got, want)
 		}
 	})
 }

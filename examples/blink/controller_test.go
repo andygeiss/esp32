@@ -16,7 +16,7 @@ func TestSetupConfiguresPin2AsOutput(t *testing.T) {
 	synctest.Test(t, func(t *testing.T) {
 		digital.GPIOModes[2] = digital.ModeInput
 
-		if err := blink.NewController().Setup(); err != nil {
+		if err := blink.Setup(); err != nil {
 			t.Fatalf("Setup: %v", err)
 		}
 
@@ -28,13 +28,12 @@ func TestSetupConfiguresPin2AsOutput(t *testing.T) {
 
 func TestLoopLeavesPin2Low(t *testing.T) {
 	synctest.Test(t, func(t *testing.T) {
-		ctrl := blink.NewController()
-		if err := ctrl.Setup(); err != nil {
+		if err := blink.Setup(); err != nil {
 			t.Fatalf("Setup: %v", err)
 		}
 		digital.Write(2, digital.High)
 
-		if err := ctrl.Loop(); err != nil {
+		if err := blink.Loop(); err != nil {
 			t.Fatalf("Loop: %v", err)
 		}
 
