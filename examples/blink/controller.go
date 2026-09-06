@@ -1,4 +1,8 @@
-package device
+// Package blink flashes the LED on pin 2, twice a second.
+//
+// It is a starter controller: copy this file over
+// internal/device/controller.go and change its package line to device.
+package blink
 
 import (
 	controller "github.com/andygeiss/esp32-controller"

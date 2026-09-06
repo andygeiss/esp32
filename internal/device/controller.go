@@ -1,3 +1,11 @@
+// Package device holds the controller that runs on the ESP32. This is the file
+// you edit.
+//
+// Only controller.go is transpiled to an Arduino sketch, and the transpiler
+// understands a small subset of Go. Keep to what is already here — plain
+// functions, constants, package-level variables and calls into
+// esp32-controller. Anything from the standard library, and anything the
+// simulator needs, belongs in another package.
 package device
 
 import (

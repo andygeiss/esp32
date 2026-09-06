@@ -1,52 +1,74 @@
-APPNAME=$(shell basename `pwd`)
-ARCH=$(shell uname -m)
-LDFLAGS="-s"
+# Copied from the baseline (stack/makefile.md). MAIN and clean follow its rule 5
+# for a single-binary CLI. firmware and flash are rule-3 targets, with the two
+# variables they need; override those on the command line, for example
+# make firmware TARGET=esp32s3
 
-INO_BAUD="921600"
-INO_BOARD="esp32"
-INO_HARDWARE_PATH="/home/$(USER)/Arduino/hardware"
-INO_IDE_PATH="/opt/arduino"
-INO_MANUFACTURER=espressif
-INO_PORT="/dev/ttyUSB0"
-INO_SDK_PATH="$(INO_HARDWARE_PATH)/$(INO_MANUFACTURER)/$(INO_BOARD)"
-INO_SKETCH_FILE=build/device.ino
-INO_SKETCH_IMAGE=build/device.img
-INO_SOURCE_FILE=device/controller.go
-INO_TOOLS_PATH="$(INO_HARDWARE_PATH)/espressif/$(INO_BOARD)/tools"
-INO_TOOLS_BUILD="$(INO_TOOLS_PATH)/build.py"
-INO_TOOLS_FLASH="$(INO_TOOLS_PATH)/esptool.py"
+# The main package: this module ships one binary, so it sits at the root.
+MAIN = .
 
-all: clean test build
+# The chip the firmware is built for. The classic ESP32 unless you say so.
+TARGET = esp32
 
-build/$(APPNAME):
-	@go build -ldflags $(LDFLAGS) -o build/$(APPNAME)-$(ARCH) main/main.go
-	@esp32-transpiler -source $(INO_SOURCE_FILE) -target $(INO_SKETCH_FILE)
-	@$(INO_TOOLS_BUILD) --ide_path=$(INO_IDE_PATH) -d $(INO_HARDWARE_PATH) -b $(INO_BOARD) -w all -o $(INO_SKETCH_IMAGE) $(INO_SKETCH_FILE)
-	
-build: build/$(APPNAME)
+# The tool that turns the controller into an Arduino sketch. Pinned like a
+# dependency rather than floated like a linter: its output is the firmware.
+TRANSPILER = github.com/andygeiss/esp32-transpiler@v0.2.0
+
+# Targets are alphabetical, so the default is named rather than first.
+.DEFAULT_GOAL = check
+.PHONY: build check ci clean firmware flash fmt run test
+
+# Release-shaped local binary in bin/ (go build creates the directory).
+build:
+	CGO_ENABLED=0 go build -trimpath -o bin/ $(MAIN)
+
+# Default. Every gate, in this order (operations/ci.md), against the working
+# tree. Run before every commit.
+check:
+	test -z "$$(gofmt -l .)" || (gofmt -l . && exit 1)
+	go vet ./...
+	go fix -diff ./...
+	go run honnef.co/go/tools/cmd/staticcheck@latest ./...
+	go run golang.org/x/vuln/cmd/govulncheck@latest ./...
+	go mod tidy -diff
+	go test -race -shuffle=on ./...
+	CGO_ENABLED=0 go build -trimpath ./...
+
+# The same gates against the commit: a file never added, or a .env, cannot
+# make it green. Run before every push. go version runs first, inside the
+# copy, so the run records which toolchain ran. The archive goes through a
+# file so git's exit status stops the run; one shell line so the trap cleans
+# up however check ends.
+ci:
+	t=$$(mktemp); d=$$(mktemp -d); trap 'rm -rf "$$t" "$$d"' EXIT; git archive -o "$$t" HEAD && tar -xf "$$t" -C "$$d" && go -C "$$d" version && $(MAKE) -C "$$d" check
 
 clean:
-	@rm -f build/*
-	
+	rm -rf bin/ esp32 firmware/build firmware/main/controller.ino
+
+# Transpiles the controller into an Arduino sketch, then builds the image the
+# board runs. Needs ESP-IDF exported into the shell first
+# (. ~/esp/esp-idf/export.sh). Deliberately not part of check: that has to stay
+# runnable on a Mac with nothing on it but Homebrew.
+firmware:
+	go run $(TRANSPILER) -source internal/device/controller.go -target firmware/main/controller.ino
+	idf.py -C firmware -DIDF_TARGET=$(TARGET) build
+
+# The image onto the board, then its log. Ctrl-] leaves the monitor.
 flash:
-	@$(INO_TOOLS_FLASH) --chip $(INO_BOARD) --port $(INO_PORT) --baud $(INO_BAUD) write_flash -fm dio -fs 4MB -ff 40m 0x00010000 $(INO_SKETCH_IMAGE)
-	
-packages:
-	@go get -u github.com/andygeiss/esp32-controller
-	@go get -u github.com/andygeiss/esp32-transpiler
-	@go install -u github.com/andygeiss/esp32-transpiler
-	@rm -rf $(INO_SDK_PATH)
-	@mkdir -p $(INO_SDK_PATH)
-	@git clone --recursive https://github.com/espressif/arduino-esp32.git $(INO_SDK_PATH)
-	@curl -SSL https://dl.espressif.com/dl/xtensa-esp32-elf-linux64-1.22.0-73-ge28a011-5.2.0.tar.gz > $(INO_SDK_PATH)/tools/xtensa.tar.gz
-	@tar xzf $(INO_SDK_PATH)/tools/xtensa.tar.gz -C $(INO_SDK_PATH)/tools/
-	@rm -f $(INO_SDK_PATH)/tools/xtensa.tar.gz
-	@git clone --recursive https://github.com/espressif/esp-idf.git $(INO_SDK_PATH)/framework
-	@mkdir -p $(INO_SDK_PATH)/tools/esptool
-	@ln -sf $(INO_SDK_PATH)/tools/esptool.py $(INO_SDK_PATH)/tools/esptool/
-	
+	idf.py -C firmware -DIDF_TARGET=$(TARGET) flash monitor
+
+# goimports first: go fix type-checks, so a missing import would stop the
+# recipe before goimports could add it. go fix manages the imports its own
+# rewrites need.
+fmt:
+	go run golang.org/x/tools/cmd/goimports@latest -w .
+	go fix ./...
+
+# Loads .env when it is there, so a local start is one command. Only run:
+# check and test MUST NOT depend on a developer's machine (rule 6). One shell
+# line, because each recipe line gets its own shell.
 run:
-	@./build/$(APPNAME)-$(ARCH)
-	
+	set -a; if [ -f .env ]; then . ./.env; fi; set +a; go run $(MAIN)
+
+# The inner loop.
 test:
-	@go test -v ./...
+	go test -race -shuffle=on ./...

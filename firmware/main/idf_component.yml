@@ -1,0 +1,10 @@
+## The Arduino core as an ESP-IDF component. It is what makes the transpiler's
+## output compile at all: Serial, WiFi, pinMode and delay are Arduino names, and
+## nothing in ESP-IDF answers to them.
+dependencies:
+  idf:
+    version: ">=5.3"
+  # Pinned exactly, the way the driver components in esp32-watch are. 4.0.0
+  # exists only as an alpha, and alphas do not ship here.
+  espressif/arduino-esp32:
+    version: "==3.3.11"

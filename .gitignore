@@ -1,1 +1,11 @@
-build/*
+.env
+bin/
+esp32
+
+# ESP-IDF: build output, the downloaded Arduino core, and the generated
+# sdkconfig. dependencies.lock is checked in — it is what pins them.
+firmware/build/
+firmware/main/controller.ino
+firmware/managed_components/
+firmware/sdkconfig
+firmware/sdkconfig.old

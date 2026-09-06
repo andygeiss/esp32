@@ -5,85 +5,200 @@
 [![Go Report Card](https://goreportcard.com/badge/github.com/andygeiss/esp32)](https://goreportcard.com/report/github.com/andygeiss/esp32)
 [![Maintainability](https://api.codeclimate.com/v1/badges/25eafcae9797d5e8a3de/maintainability)](https://codeclimate.com/github/andygeiss/esp32/maintainability)
 
-Build your own toolchain to develop, test, build and finally deploy a Golang controller to your ESP32 device.
+Write the code for your ESP32 in Go, run it on your own machine, then flash it to
+the device. This is for anyone who has grown tired of the Arduino IDE's only way to
+find a bug: compile, flash, and stare at the serial monitor.
 
-## Purpose
+## Run it
 
-The [Arduino IDE](https://www.arduino.cc/en/Main/Software) is easy to use.
-But I faced problems like maintainability and testability at more complicated IoT projects.
-I needed to compile and flash the ESP32 before testing my code functionality by doing it 100% manually.
+    git clone https://github.com/andygeiss/esp32.git
+    cd esp32
+    make run
 
-This solution transpiles Golang into Arduino code, which can be compiled to an image by using the ESP32 toolchain.
-Now I am able to use a fully automated testing approach instead of doing it 100% manually.
+That builds the controller in `internal/device/controller.go` and runs it here,
+the way the ESP32 would:
 
-## Process
+    Connecting to WiFi .... Connected!
+    Connecting to [HOSTNAME:3000)] ... Connected!
+    GET /index.html HTTP/1.0
 
-    +--------+    +---------+    +----------+
-    |  Test  +---->  Build  +---->  Deploy  |
-    +--------+    +---------+    +----------+
+Press Ctrl-C to stop. A second Ctrl-C kills the process, which is the way out
+when a loop is in the middle of a long `timer.Delay`.
 
-              make                make flash
+The binary takes two flags:
 
-**Important**: The Transpiler only supports a small subset of the [Golang Language Specification](https://golang.org/ref/spec).
+    esp32 -n 5        # stop after five loops; 0, the default, runs until you stop it
+    esp32 -version    # print the version and exit
 
-## Installation
+The controller's output goes to stdout, so `esp32 > serial.log` captures exactly
+what the serial monitor would show. Everything else — errors, usage — goes to
+stderr.
 
-First download and install the latest [Arduino IDE](https://www.arduino.cc/en/Main/Software) into <code>/opt/arduino</code> or change <code>INO_IDE_PATH</code> in the <code>Makefile</code>
-and necessary packages.
+You can install it too:
 
-- **Ubuntu**:
+    go install github.com/andygeiss/esp32@latest
 
-        sudo apt-get install -y bison flex git gperf libncurses-dev make python
+That gives you the controller *from this repository*. Yours lives in
+`internal/device/controller.go`, so the real path is clone, edit, `make`.
 
-- **Manjaro**:
+## Write your own controller
 
-        sudo pip install pyserial
+Edit `internal/device/controller.go`. `Setup` runs once, `Loop` runs forever —
+the same two functions an Arduino sketch has. Set `ssid` and `pass` to your own
+access point while you are in there.
 
-Next run the ESP32 SDK-Installation:
+`examples/blink/controller.go` is a smaller starting point that flashes the LED
+on pin 2. Copy it over `internal/device/controller.go` and change its package
+line to `device`.
 
-    make packages
+**The transpiler reads that one file, and it understands only a small subset of
+[the Go language spec](https://go.dev/ref/spec).** Stick to plain functions,
+constants, package-level variables and calls into `esp32-controller`. The
+[mapping](https://github.com/andygeiss/esp32-transpiler/blob/master/internal/transpile/handlers/mapping.go)
+and the
+[tests](https://github.com/andygeiss/esp32-transpiler/blob/master/internal/transpile/service_test.go)
+say what it can do today. Anything else — the standard library, generics, a
+context — belongs in another package.
 
-Look at the [examples](https://github.com/andygeiss/esp32/tree/master/examples) for more information.
+## Test it
 
-## Develop, Test and Build
+    make          # every gate: format, vet, staticcheck, govulncheck, race tests, build
+    make test     # just the tests, while you work
 
-Change the Arduino port to your current settings by changing the <code>Makefile</code>:
+There is no CI server. `make check` is the gate against your working tree and
+`make ci` runs the same gates against the commit, so run that before you push.
 
-    INO_PORT="/dev/ttyUSB0"
+Tests wrap the controller in a [`synctest`](https://pkg.go.dev/testing/synctest)
+bubble. A loop that waits five seconds on the device takes no time at all here.
 
-Also set the <code>SSID</code> and <code>PASS</code> strings at <code>application/device/controller.go</code> to your WiFi Access Point and start the build process by using:
+## Install ESP-IDF
 
-    make
+You only need this to build and flash a real image. Running and testing the
+controller on your own machine needs nothing but Go.
 
-Run the binary at <code>build/device-${ARCH}</code> to simulate your ESP32 device locally.
+ESP-IDF lives outside the tree, in the same place
+[esp32-watch](https://github.com/andygeiss/esp32-watch) keeps it, so one install
+serves both projects:
 
-    Connecting to WiFi ...... Connected!
+    git clone --depth 1 --shallow-submodules --recursive -b v5.5 \
+        https://github.com/espressif/esp-idf.git ~/esp/esp-idf
+    ~/esp/esp-idf/install.sh esp32
 
-## Deploy
+Then export it into the shell you build in. That is not a permanent change to
+your PATH, so every new terminal needs it again:
 
-Finally use the following command to deploy the image <code>device.img</code> to your real ESP32 device.
+    . ~/esp/esp-idf/export.sh
 
-    make flash
+That is the whole install. The Arduino core arrives on its own: it is a pinned
+ESP-IDF component in `firmware/main/idf_component.yml`, and the component
+manager downloads it the first time you build.
 
-**Important**: Please ensure that the current user is in the <code>dialout</code> group. Or you will receive a <code>permission denied</code>.
+## Build and flash
 
-This will create the following output:
+    make firmware    # transpile the controller, then build the image
+    make flash       # write it to the board, then show the serial log
 
-    2018/08/05 16:04:22 Flashing ...
-    esptool.py v2.3.1
-    Connecting....
-    Chip is ESP32D0WDQ6 (revision 1)
-    Features: WiFi, BT, Dual Core
-    Uploading stub...
-    Running stub...
-    Stub running...
-    Changing baud rate to 921600
-    Changed.
-    Configuring flash size...
-    Compressed 607456 bytes to 366770...
-    Wrote 607456 bytes (366770 compressed) at 0x00010000 in 5.9 seconds (effective 816.9 kbit/s)...
-    Hash of data verified.
+`make firmware` turns `internal/device/controller.go` into
+`firmware/main/controller.ino` and hands that to ESP-IDF. Ctrl-] leaves the
+monitor `make flash` opens.
 
-    Leaving...
-    Hard resetting via RTS pin...
-    2018/08/05 16:04:22 Done.
+Both targets take two overrides:
+
+    make firmware TARGET=esp32s3          # build for a different chip
+    make flash ESPPORT=/dev/ttyUSB0       # name the serial port yourself
+
+`idf.py` finds the board on its own most of the time, so `ESPPORT` is for when
+it guesses wrong. On Linux **your user has to be in the `dialout` group**, or
+flashing stops at `permission denied`.
+
+The image is about 900 KB, nearly all of it the Arduino core and the WiFi stack.
+`firmware/partitions.csv` gives the app 2 MB of the board's 4 MB so there is room
+to write a real controller; the built-in table would leave 12% free before you
+started.
+
+## Why there are no environment variables
+
+The SSID, the passphrase and the host are constants in
+`internal/device/controller.go`, not settings. The transpiler turns them into
+`const char*` in the sketch, so they are baked into the image before the device
+ever boots. There is nothing left to configure at run time.
+
+## What is in here
+
+    esp32/
+    ├── examples/
+    │   └── blink/
+    │       ├── controller.go        ← a starter controller you can copy over
+    │       └── controller_test.go
+    ├── firmware/
+    │   ├── CMakeLists.txt           ← the ESP-IDF project
+    │   ├── dependencies.lock        ← pins the Arduino core; checked in
+    │   ├── main/
+    │   │   ├── CMakeLists.txt
+    │   │   ├── idf_component.yml    ← the Arduino core, pinned
+    │   │   └── sketch.cpp           ← includes the transpiled controller.ino
+    │   ├── partitions.csv
+    │   └── sdkconfig.defaults
+    ├── go.mod
+    ├── go.sum
+    ├── internal/
+    │   ├── device/
+    │   │   ├── controller.go        ← the file you edit; the only file transpiled
+    │   │   └── controller_test.go
+    │   └── simulator/
+    │       ├── simulator.go         ← setup once, then loop, on this machine
+    │       └── simulator_test.go
+    ├── LICENSE
+    ├── main.go
+    ├── main_test.go
+    ├── Makefile
+    ├── README.md
+    └── SPEC.md
+
+Three repositories make this work. This one holds your controller and the
+toolchain around it.
+[esp32-controller](https://github.com/andygeiss/esp32-controller) is the Arduino
+API written in Go, and
+[esp32-transpiler](https://github.com/andygeiss/esp32-transpiler) rewrites your
+Go into the C++ the device compiles. `make firmware` fetches the transpiler with
+`go run`, so there is nothing to install. The C++ it writes is Arduino, which
+ESP-IDF compiles through the `espressif/arduino-esp32` component.
+
+## Baseline deviations
+
+This project follows the [engineering baseline](https://github.com/andygeiss/baseline)
+as a **CLI tool**, the closest of its three project types. Below is every rule it
+waives, every rule it meets by another route, and the one dependency it has to
+justify.
+
+- **A CLI terminates** (`project-types/cli-tool.md`) — waived 2026-09-06 by Andy.
+  `esp32` mirrors the device: set up once, then loop until something stops it. The
+  baseline has no project type for firmware, and a tool that ended after one pass
+  would not show you what the device does. Contained by `-n`: every test and every
+  gate runs a bounded number of loops, and Ctrl-C ends an unbounded one.
+
+- **Everything under `internal/`** (`patterns/go-project-layout.md` rule 2) —
+  waived 2026-09-06 by Andy. `examples/blink` exists to be opened and copied, so
+  it sits where a reader looks first. Contained to `examples/`: nothing imports
+  it, and `make check` covers it like any other package.
+
+- **The Makefile is the baseline's** (`stack/makefile.md`) — waived 2026-09-06 by
+  Andy, on two counts. Rule 3 allows the `firmware` and `flash` targets, but not
+  the `TARGET` and `TRANSPILER` variables above them; those are what let you
+  build for another chip without editing the file. And rule 4 floats dev tools at
+  `@latest`, while `TRANSPILER` names an exact version: the transpiler's output
+  is the firmware, not a pass or a fail, so a floating version would change what
+  gets flashed without a commit.
+
+- **Ports and adapters** (`patterns/go-ports-adapters.md`) — met by another route.
+  `esp32-controller` is already the hand-written fake this pattern asks for: on
+  the device its calls become Arduino API calls, and here they move numbers around
+  in a map. There is no second implementation left to hide behind a port.
+
+- **`github.com/andygeiss/esp32-controller`** is the only Go dependency, and it is
+  not on the baseline's approved list. It is the Arduino API spelled in Go, and
+  the transpiler rewrites each call into its C++ equivalent. Nothing in the
+  standard library reaches a GPIO pin. `espressif/arduino-esp32` in
+  `firmware/main/idf_component.yml` is the other half of that same story — the
+  C++ those calls land in — and it is an ESP-IDF component, which the baseline's
+  Go approved list does not speak to either way.

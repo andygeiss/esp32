@@ -1,0 +1,22 @@
+# The classic ESP32, the chip this repository has always been written for. Build
+# for another one with `make firmware TARGET=esp32s3`.
+CONFIG_IDF_TARGET="esp32"
+
+# The Arduino core brings its own app_main, which calls the sketch's setup() and
+# loop(). Without this there is no entry point at all and the link fails.
+CONFIG_AUTOSTART_ARDUINO=y
+
+# 4 MB of flash, which is what the boards this repository was written for carry.
+# The default is 2 MB and would leave half the chip unreachable.
+CONFIG_ESPTOOLPY_FLASHSIZE_4MB=y
+
+# The built-in single-app table gives the app 1 MB. The Arduino core with WiFi
+# fills 897 KB of that on its own — 12% free — so there is no room left to write
+# a controller in. partitions.csv gives it 2 MB.
+CONFIG_PARTITION_TABLE_CUSTOM=y
+CONFIG_PARTITION_TABLE_CUSTOM_FILENAME="partitions.csv"
+
+# A sketch expects delay(1) to be one millisecond. At the default 100 Hz tick it
+# would be ten, and every timer.Delay in the controller would be ten times too
+# long.
+CONFIG_FREERTOS_HZ=1000

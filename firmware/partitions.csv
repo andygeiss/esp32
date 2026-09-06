@@ -1,0 +1,7 @@
+# The Arduino core and WiFi are 897 KB before the controller adds a line, so the
+# default 1 MB app partition leaves nothing to grow into. 2 MB of the board's
+# 4 MB is room, and still leaves half the chip for whatever comes next.
+# Name,     Type, SubType, Offset,  Size
+nvs,        data, nvs,     0x9000,  0x6000
+phy_init,   data, phy,     0xf000,  0x1000
+factory,    app,  factory, 0x10000, 2M
