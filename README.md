@@ -2,7 +2,6 @@
 
 [![License](https://img.shields.io/github/license/andygeiss/esp32)](https://github.com/andygeiss/esp32/blob/master/LICENSE)
 [![Releases](https://img.shields.io/github/v/release/andygeiss/esp32)](https://github.com/andygeiss/esp32/releases)
-[![Go Report Card](https://goreportcard.com/badge/github.com/andygeiss/esp32)](https://goreportcard.com/report/github.com/andygeiss/esp32)
 [![Maintainability](https://api.codeclimate.com/v1/badges/25eafcae9797d5e8a3de/maintainability)](https://codeclimate.com/github/andygeiss/esp32/maintainability)
 
 Write the code for your ESP32 in Go, run it on your own machine, then flash it to
