@@ -196,13 +196,13 @@ justify.
   it sits where a reader looks first. Contained to `examples/`: nothing imports
   it, and `make check` covers it like any other package.
 
-- **The Makefile is the baseline's** (`stack/makefile.md`) — waived 2026-09-06 by
-  Andy, on two counts. Rule 3 allows the `firmware` and `flash` targets, but not
-  the `TARGET` and `TRANSPILER` variables above them; those are what let you
-  build for another chip without editing the file. And rule 4 floats dev tools at
-  `@latest`, while `TRANSPILER` names an exact version: the transpiler's output
-  is the firmware, not a pass or a fail, so a floating version would change what
-  gets flashed without a commit.
+- **The Makefile is the baseline's** (`stack/makefile.md`) — conformance, not a
+  waiver. Rule 3 allows the `firmware` and `flash` targets, and rule 5 the
+  `TARGET` and `TRANSPILER` variables above them, which let you build for another
+  chip without editing the file. Rule 4 pins `TRANSPILER` to an exact version: the
+  transpiler's output is the firmware, so a floating version would change what
+  gets flashed without a commit. Waived 2026-09-06 by Andy, and closed 2026-10-31
+  when the baseline took both into its rules.
 
 - **Ports and adapters** (`patterns/go-ports-adapters.md`) — met by another route.
   `esp32-controller` is already the hand-written fake this pattern asks for: on
